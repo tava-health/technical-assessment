@@ -1,0 +1,8 @@
+# CODEOWNERS — required reviewers for security-sensitive scanning config.
+# Later matches take precedence over earlier ones.
+
+# Trivy scanner workflows (SCA / IaC) — owned by InfoSec.
+/.github/workflows/trivy-*.yml @tava-health/infosec
+
+# Trivy accepted-risk suppressions — InfoSec must approve every change.
+/.trivyignore @tava-health/infosec
