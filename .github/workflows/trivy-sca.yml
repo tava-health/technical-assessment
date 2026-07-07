@@ -11,6 +11,7 @@ name: trivy-sca
 permissions:
   contents: read
   security-events: write
+  pull-requests: write # Required for the sticky Trivy findings comment (SEC-272)
 
 # Trivy SCA (dependency vulnerability) scan on every PR.
 # Non-blocking rollout: findings are reported but never fail the check
