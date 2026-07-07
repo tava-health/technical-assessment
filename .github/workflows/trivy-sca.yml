@@ -1,0 +1,28 @@
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+
+name: trivy-sca
+
+# Top-level permissions set the GITHUB_TOKEN ceiling for the called reusable
+# workflow. security-events: write is required for the optional SARIF upload.
+permissions:
+  contents: read
+  security-events: write
+
+# Trivy SCA (dependency vulnerability) scan on every PR.
+# Non-blocking rollout: findings are reported but never fail the check
+# (exit_code '0', block_on_critical false). A single `fs` pass auto-detects
+# supported lockfiles/manifests (pnpm-lock.yaml, package-lock.json, yarn.lock,
+# go.mod, requirements.txt, uv.lock). Accepted-risk CVEs go in a repo-root
+# .trivyignore (auto-discovered). Flip block_on_critical to true once clean.
+jobs:
+  trivy-sca:
+    uses: tava-health/infra-github-actions/.github/workflows/trivy-sca.yml@main
+    with:
+      scanners: "vuln"
+      severity: "HIGH,CRITICAL"
+      exit_code: "0"
+      block_on_critical: false
