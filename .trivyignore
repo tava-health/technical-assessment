@@ -1,0 +1,16 @@
+# .trivyignore — accepted-risk suppressions for Trivy SCA
+#
+# Trivy auto-discovers this file at the repo root; no caller change needed.
+#
+# RULES (enforced in review):
+#   1. Never add a bare CVE ID. Every entry MUST have, on the comment lines above it:
+#        - reason (no fix available, or path unreachable/not exploitable)
+#        - owner (@github-handle)
+#        - tracking ticket (SEC-xxx)
+#        - re-evaluation / expiry date
+#   2. If a fix exists and the upgrade is feasible — upgrade the dependency instead.
+#   3. For long-term accepted risk prefer .trivyignore.yaml (supports `expires`).
+#
+# Full guide: https://github.com/tava-health/infra-github-actions/blob/main/docs/trivy-sca.md
+#
+# (No active suppressions yet.)
