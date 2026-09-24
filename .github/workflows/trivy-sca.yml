@@ -14,16 +14,18 @@ permissions:
   pull-requests: write # Required for the sticky Trivy findings comment (SEC-272)
 
 # Trivy SCA (dependency vulnerability) scan on every PR.
-# Non-blocking rollout: findings are reported but never fail the check
-# (exit_code '0', block_on_critical false). A single `fs` pass auto-detects
-# supported lockfiles/manifests (pnpm-lock.yaml, package-lock.json, yarn.lock,
-# go.mod, requirements.txt, uv.lock). Accepted-risk CVEs go in a repo-root
-# .trivyignore (auto-discovered). Flip block_on_critical to true once clean.
+# Enforced (SEC-268 / SEC-297): the check FAILS on any HIGH or CRITICAL finding
+# (exit_code "1", block_on_critical true) and is a required status check on the
+# default branch, so a PR cannot merge with an unresolved HIGH/CRITICAL.
+# Fix by upgrading the dependency (see the "Fixed Version" column). If there is
+# no fix or the vulnerable path is unreachable, add a justified, time-boxed entry
+# to the repo-root .trivyignore (reason + owner + ticket + expiry). Guide:
+# https://github.com/tava-health/infra-github-actions/blob/main/docs/trivy-sca.md
 jobs:
   trivy-sca:
     uses: tava-health/infra-github-actions/.github/workflows/trivy-sca.yml@main
     with:
       scanners: "vuln"
       severity: "HIGH,CRITICAL"
-      exit_code: "0"
-      block_on_critical: false
+      exit_code: "1"
+      block_on_critical: true
